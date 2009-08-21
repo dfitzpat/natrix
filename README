@@ -1,4 +1,9 @@
-Natrix is a class for making named matrix structures (more for text than math). It was designed to take rows of data and put the value of each row in a cell in the matrix. In other words, the row contains an x, y, and a value. It also supports very basic import and export of delimited text and output of JSON (array of arrays) and (array of hashes). It has a strict mode so it can raise an error if you try to set a cell that does not exist.
+Natrix is a class for making named matrix structures (more for text than math).
+It was designed to take rows of data and put the value of each row in a cell in
+the matrix. In other words, the row contains an x, y, and a value. It also 
+supports very basic import and export of delimited text and output of JSON 
+(array of arrays) and (array of hashes). It has a strict mode so it can raise 
+an error if you try to set a cell that does not exist.
 
 >> require 'natrix'
 => true
