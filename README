@@ -1,3 +1,46 @@
-Natrix is a class for making a Named Matrix
+Natrix is a class for making named matrix structures (more for text than math). It was designed to take rows of data and put the value of each row in a cell in the matrix. In other words, the row contains an x, y, and a value. It also supports very basic import and export of delimited text and output of JSON (array of arrays) and (array of hashes). It has a strict mode so it can raise an error if you try to set a cell that does not exist.
 
+>> require 'natrix'
+=> true
+>> n = Natrix.new :xs=>%w(a b c), :ys=>%w(d e f)
+=> #<Natrix:0x10a5fb8 @xs=["a", "b", "c"], @d={}, @mode="open", @ys=["d", "e", "f"]>
+>> n.set(:a,:d,10)
+=> 10
+>> n.get('a','d')
+=> 10
+>> n.get(0,0)
+=> 10
+>> n.get(0,1)
+=> nil
+>> n.mode = :strict
+=> :strict
+>> n.set(:y,:u,0)
+ArgumentError: No X axis with a value of :y
+        from ./natrix.rb:55:in `validate_input'
+        from ./natrix.rb:66:in `set'
+        from (irb):9
+>> tab_text = "1\t2\t3\n4\t5\t6\n7\t8\t9"
+=> "1\t2\t3\n4\t5\t6\n7\t8\t9"                
+>> n.from_delimited(tab_text)
+=> ["1\t2\t3", "4\t5\t6", "7\t8\t9"]
+>> n.get(2,2)
+=> "9"
+>> n.each_x(:b){|a| puts a}
+2
+5
+8
+=> ["d", "e", "f"]
+>> n.each_y(:d){|a| puts a}
+1
+2
+3
+=> ["a", "b", "c"]
+>> n.to_delimited(",")
+=> "1,2,3\n4,5,6\n7,8,9"
 
+>> require 'json'
+=> true
+>> n.to_json_ah
+=> "[{"a": "1","b": "2","c": "3"},{"a": "4","b": "5","c": "6"},{"a": "7","b": "8","c": "9"}]"
+>> n.to_json_aa
+=> "[["1","2","3"],["4","5","6"],["7","8","9"]]"
