@@ -69,6 +69,11 @@ class Natrix
     d[xk(x)][yk(y)] = val
   end
   
+  # Set a value
+  def []=(x,y,val)
+    set(x,y,val)
+  end
+  
   # Get a value
   def get(x,y)
     # Validate input if strict mode
@@ -76,6 +81,11 @@ class Natrix
       validate_input(x,y)
     end
     d[xk(x)][yk(y)] rescue nil
+  end
+  
+  # Get a value
+  def [](x,y)
+    get(x,y)
   end
   
   # Each returns all the values x0y0, x1y0, x2y0, x0y1, x1y1, x2y1...
