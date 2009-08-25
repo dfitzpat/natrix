@@ -1,5 +1,20 @@
-
 # Natrix is a named matrix
+#
+# Copyright 2009 ePark Labs, Inc. <http://eparklabs.com/>
+# Author: Dan Fitzpatrick
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   
+#     http://www.apache.org/licenses/LICENSE-2.0
+#       
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 # t = Natrix.new(
 #   :xs => %w(a b c d), 
 #   :ys => %w(m n o p)
@@ -62,9 +77,7 @@ class Natrix
   # Set a value
   def set(x,y,val)
     # Validate input if strict mode
-    if mode.to_s == 'strict'
-      validate_input(x,y)
-    end
+    validate_input(x,y) if mode.to_s == 'strict'
     d[xk(x)] ||= Hash.new
     d[xk(x)][yk(y)] = val
   end
@@ -77,9 +90,7 @@ class Natrix
   # Get a value
   def get(x,y)
     # Validate input if strict mode
-    if mode.to_s == 'strict'
-      validate_input(x,y)
-    end
+    validate_input(x,y) if mode.to_s == 'strict'
     d[xk(x)][yk(y)] rescue nil
   end
   
