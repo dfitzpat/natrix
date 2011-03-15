@@ -94,8 +94,14 @@ class Natrix
     d[xk(x)][yk(y)] rescue nil
   end
   
-  # Get a value
-  def [](x,y)
+  # Get a value with two args, get a row with 1 arg, empty with no args
+  def [](x=nil,y=nil)
+    return nil if x.nil? and y.nil?
+    if y.nil?
+      re = []
+      each_y(x){|v| re << v}
+      return re
+    end
     get(x,y)
   end
   
@@ -134,6 +140,70 @@ class Natrix
     }
   end
   
+  # Each Y A yields an Array of values for each row/y
+  def each_ya
+    ys.map{|y| 
+      yield xs.map{|x| 
+        d[x][y] rescue nil
+      }
+    }
+  end
+  
+  # Each Y A yields an Array of values for each row/y
+  def each_ya_with_index
+    i = 0
+    ys.map{|y| 
+      yield xs.map{|x| 
+        d[x][y] rescue nil
+      }, i
+      i += 1
+    }
+  end
+  
+  # Each Y A yields a hash of values for each row/y
+  def each_yh
+    ys.map{|y| 
+      h = Hash.new
+      xs.map{|x| 
+        h[x] = d[x][y] rescue nil
+      }
+      yield h
+    }
+  end
+  
+  # Each Y A yields a hash of values for each row/y
+  def each_yh_with_index
+    i = 0
+    ys.map{|y| 
+      h = Hash.new
+      xs.map{|x| 
+        h[x] = d[x][y] rescue nil
+      }
+      yield h, i
+      i += 1
+    }
+  end
+  
+  # Each X A yields an Array of values for each column/x
+  def each_xa
+    xs.map{|x| 
+      yield ys.map{|y| 
+        d[x][y] rescue nil
+      }
+    }
+  end
+  
+  # Each X A yields an Array of values for each column/x
+  def each_xa_with_index
+    i = 0
+    xs.map{|x| 
+      yield ys.map{|y| 
+        d[x][y] rescue nil
+      },i
+      i += 1
+    }
+  end
+  
   # Output delimted text
   def to_delimited(x_delimiter="\t",y_delimiter="\n")
     ys.map{|y| 
@@ -157,6 +227,38 @@ class Natrix
     }
   end
   
+  # Build data from delimited text
+  def from_array(data)
+    data.each_with_index{|line,y| 
+      line.each_with_index{|cell,x|
+        begin
+          d[xs[x]][ys[y]] = cell
+        rescue
+          d[xs[x]] ||= Hash.new
+          d[xs[x]][ys[y]] = cell
+        end
+      }
+    }
+  end
+  
+  def to_ah
+    ys.map{|y| 
+      h = Hash.new
+      xs.map{|x| 
+        h[x] = d[x][y] rescue nil
+      }
+      h
+    }
+  end
+  
+  def to_aa
+    ys.map{|y| 
+      xs.map{|x| 
+        d[x][y] rescue nil
+      }
+    }
+  end
+  
   # Output a json array of hashes (You need to require json for this to work)
   def to_json_ah
     "[#{ys.map{|y| 
@@ -173,6 +275,14 @@ class Natrix
         (d[x][y] rescue nil).to_json
       }.join(",")}]"
      }.join(",")}]"
+  end
+
+  def size
+    ys.size
+  end
+
+  def empty?
+    size == 0
   end
   
 end
